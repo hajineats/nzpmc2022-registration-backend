@@ -20,7 +20,6 @@ const generateCSV = (teacher) => {
 
 mailRouter.get('/:id', async (req, res) => {
     try {
-        console.log("yeah")
         const teacher = await Teacher.findById(req.params.id).populate('students')
 
         if (teacher) {
