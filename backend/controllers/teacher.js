@@ -16,25 +16,23 @@ teacherRouter.post('/gotHere', (req,res)=>res.send("hello"))
 teacherRouter.post('/csv',
     async (
         req,
-        res)=>{
+        res,
+        next)=>{
     const body = req.body
-    const teacher = await Teacher.findById(body.teacherCode)
-        .populate('students')
-    if(!teacher) {
-        res.status(400).json(
-            {
+    try{
+        const teacher = await Teacher.findById(body.teacherCode).populate('students')
+        res.json(teacher)
+    }catch(e){
+        res.status(400)
+            .json({
                 error: "teacher does not exist"
-            }
-        ).end()
-        return
+            })
+            .end()
     }
-    console.log(teacher)
-    // send teacher
-    res.json(teacher)
 })
 
 
-teacherRouter.post('/', async (req, res, next)=>{
+teacherRouter.post('/', async (req, res)=>{
     const body = req.body
     //check teacher doesn't already exist, based on email
     const findByEmail = await Teacher.findOne({email:body.email})
@@ -50,6 +48,9 @@ teacherRouter.post('/', async (req, res, next)=>{
             email: body.email,
             schoolName: body.schoolName,
             schoolAddress: body.schoolAddress,
+            phoneNumber: body.phoneNumber,
+            teacherCategory: body.teacherCategory,
+            island: body.island
         })
 
         try{

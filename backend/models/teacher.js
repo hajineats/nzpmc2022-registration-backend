@@ -18,6 +18,18 @@ const teacherSchema = new mongoose.Schema({
         required: true,
         type: String
     },
+    phoneNumber: {
+        required: true,
+        type: String
+    },
+    teacherCategory: {
+        required: true,
+        type: String
+    },
+    island: {
+        required: true,
+        type: String
+    },
     students:[
         {
             type: mongoose.Schema.Types.ObjectId,

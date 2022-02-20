@@ -22,40 +22,54 @@ studentRouter.get('/:id', async (req, res)=>{
 studentRouter.post('/', async (req, res)=>{
     const body = req.body
 
-    //check teacher is registered
-    const teacherFound= await Teacher.findById(body.teacher)
-
-    if(!teacherFound){
-        res.status(400).json({
-            error: "Could not find the teacher. Please double check the code given from your teacher."
-        }).end()
-    }else{
-        const newStudent = new Student({
-            name: body.name,
-            email: body.email,
-            yearLevel: body.yearLevel,
-            teacher: teacherFound._id
-        })
-        try{
-            const savedStudent = await newStudent.save()
-            teacherFound.students = teacherFound.students.concat(savedStudent._id)
-            await teacherFound.save()
-            res.json(savedStudent).end()
-
-            const emailBody = getBody("Thanks for your registration",
-                wrapperHtml(savedStudent.toJSON(), savedStudent._id))
-            sendEmail({
-                to: body.email,
-                subject: "Thank you for registering into The NZPMC 2020",
-                html: emailBody
-            })
-        }catch(e){
+    try{
+        //check teacher is registered
+        const teacherFound= await Teacher.findById(body.teacher)
+        if(!teacherFound){
             res.status(400).json({
-                error: e.toString()
+                error: "Could not find the teacher. Please double check the code given from your teacher."
+            }).end()
+        }else{
+            const newStudent = new Student({
+                firstName: body.firstName,
+                middleName: body.middleName,
+                surname: body.surname,
+                email: body.email,
+                yearLevel: body.yearLevel,
+                howDidYouHear: body.howDidYouHear,
+                whatMotivatedYou: body.whatMotivatedYou,
+                teacher: body.teacher
             })
-        }
+            try{
+                console.log('got here')
+                const savedStudent = await newStudent.save()
+                teacherFound.students = teacherFound.students.concat(savedStudent._id)
+                await teacherFound.save()
+                console.log('got here too')
+                res.json(savedStudent).end()
+                //
+                // const emailBody = getBody("Thanks for your registration",
+                //     wrapperHtml(savedStudent.toJSON(), savedStudent._id))
+                // sendEmail({
+                //     to: body.email,
+                //     subject: "Thank you for registering into The NZPMC 2020",
+                //     html: emailBody
+                // })
+            }catch(e){
+                console.error(e)
+                res.status(400).json({
+                    error: e.toString()
+                })
+            }
 
+        }
+    }catch(e){
+        console.error(e)
+        res.status(400).json({
+            error: 'teacher code does not exist'
+        })
     }
+
 })
 
 studentRouter.delete('/:id', async (req, res)=>{
