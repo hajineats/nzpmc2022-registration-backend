@@ -11,6 +11,28 @@ teacherRouter.get('/', async (req, res)=>{
     res.json(teachers.map(t=>t.toJSON()))
 
 })
+teacherRouter.post('/gotHere', (req,res)=>res.send("hello"))
+
+teacherRouter.post('/csv',
+    async (
+        req,
+        res)=>{
+    const body = req.body
+    const teacher = await Teacher.findById(body.teacherCode)
+        .populate('students')
+    if(!teacher) {
+        res.status(400).json(
+            {
+                error: "teacher does not exist"
+            }
+        ).end()
+        return
+    }
+    console.log(teacher)
+    // send teacher
+    res.json(teacher)
+})
+
 
 teacherRouter.post('/', async (req, res, next)=>{
     const body = req.body
