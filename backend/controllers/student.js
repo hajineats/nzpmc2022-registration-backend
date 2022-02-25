@@ -47,14 +47,14 @@ studentRouter.post('/', async (req, res)=>{
                 await teacherFound.save()
                 console.log('got here too')
                 res.json(savedStudent).end()
-                //
-                // const emailBody = getBody("Thanks for your registration",
-                //     wrapperHtml(savedStudent.toJSON(), savedStudent._id))
-                // sendEmail({
-                //     to: body.email,
-                //     subject: "Thank you for registering into The NZPMC 2020",
-                //     html: emailBody
-                // })
+
+                const emailBody = getBody("Thanks for your registration",
+                    wrapperHtml(savedStudent.toJSON(), savedStudent._id))
+                sendEmail({
+                    to: body.email,
+                    subject: "The NZPMC 2022 Registration",
+                    html: emailBody
+                })
             }catch(e){
                 console.error(e)
                 res.status(400).json({
