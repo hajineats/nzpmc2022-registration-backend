@@ -30,6 +30,10 @@ const teacherSchema = new mongoose.Schema({
         required: true,
         type: String
     },
+    city: {
+        required: true,
+        type: String
+    },
     students:[
         {
             type: mongoose.Schema.Types.ObjectId,

@@ -50,7 +50,8 @@ teacherRouter.post('/', async (req, res)=>{
             schoolAddress: body.schoolAddress,
             phoneNumber: body.phoneNumber,
             teacherCategory: body.teacherCategory,
-            island: body.island
+            island: body.island,
+            city: body.city,
         })
 
         try{
@@ -61,7 +62,7 @@ teacherRouter.post('/', async (req, res)=>{
 
             sendEmail({
                 to: body.email,
-                subject: "Thank you for registering into The NZPMC 2020",
+                subject: "The NZPMC 2022 Registration",
                 html: emailBody
             })
         }catch{
